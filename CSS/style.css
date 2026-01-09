@@ -1,0 +1,221 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+/* ===========================
+   PAGE & HERO
+=========================== */
+.page {
+  width: 100%;
+  height: 100vh;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===========================
+   BACKGROUND IMAGE
+=========================== */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===========================
+   OVERLAY (DARK GRADIENT)
+=========================== */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.30) 55%,
+      rgba(0, 0, 0, 0.10) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.10) 0%,
+      rgba(0, 0, 0, 0.35) 70%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+  z-index: 1;
+}
+
+/* ===========================
+   TOP BAR
+=========================== */
+.topbar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 48px;
+}
+
+/* Logo */
+.brand-logo {
+  height: 56px;
+  width: auto;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 14px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+}
+
+.nav-link {
+  padding: 10px 16px;
+  font-weight: 600;
+  color: #0b1220;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ===========================
+   HERO CONTENT
+=========================== */
+.hero-content {
+  position: absolute;
+  z-index: 3;
+  top: 28%;
+  left: 5%;
+  max-width: 560px;
+}
+
+.hero-title {
+  margin: 0 0 16px;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.hero-subtitle {
+  margin: 0 0 24px;
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+.hero-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.btn {
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Primary */
+.btn-primary {
+  background: #f2c200;
+  color: #0b1220;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+}
+
+/* Secondary */
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+/* ===========================
+   BOTTOM BAR
+=========================== */
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    90deg,
+    rgba(9, 43, 78, 0.95),
+    rgba(9, 43, 78, 0.75)
+  );
+  z-index: 3;
+}
+
+.bottom-text {
+  font-size: clamp(28px, 3vw, 46px);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #f2c200;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 18px 22px;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .hero-content {
+    top: 32%;
+    left: 6%;
+    right: 6%;
+    max-width: none;
+  }
+
+  .bottom-bar {
+    height: 72px;
+  }
+}
