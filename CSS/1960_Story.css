@@ -87,11 +87,11 @@ body {
 }
 
 /* ---------------------------
-   DECADE TITLE
+   DECADE TITLE (scrolls with first section)
 ---------------------------- */
 .decade-title {
-  position: fixed;
-  top: 130px;            /* below navbar */
+  position: absolute;
+  top: 130px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 40;
@@ -100,7 +100,7 @@ body {
   font-weight: 900;
   font-size: clamp(56px, 7vw, 110px);
 
-  color: #fff3b0; /* warm pale yellow like your frame */
+  color: #fff3b0;
   text-shadow: 0 10px 28px rgba(0,0,0,0.35);
   pointer-events: none;
 }
@@ -115,13 +115,14 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 10px;
-  background: #2f7b73; /* teal */
+  background: #2f7b73;
   z-index: 15;
   opacity: 0.95;
 }
 
 /* ---------------------------
    FULLSCREEN EVENT SECTIONS
+   (BACKGROUND IMAGE IS HERE)
 ---------------------------- */
 .event {
   position: relative;
@@ -130,7 +131,6 @@ body {
   align-items: center;
   justify-content: center;
 
-  background-image: var(--bg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -139,16 +139,29 @@ body {
   padding-bottom: 80px;
 }
 
-/* soft overlay for readability */
+/* Background image for each year (FULL PAGE) */
+.bg-1963 {
+  background-image: url("../Images/1963 first image.png");
+}
+
+.bg-1967 {
+  background-image: url("../Images/1963 second image.png");
+}
+
+.bg-1968 {
+  background-image: url("../Images/1963 third image.png");
+}
+
+/* overlay for readability */
 .event-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.32);
   z-index: 1;
 }
 
 /* ---------------------------
-   CARD + CONNECTOR
+   CARD (solid grey like Figma)
 ---------------------------- */
 .event-card {
   position: relative;
@@ -157,8 +170,8 @@ body {
   width: min(420px, 86vw);
   padding: 28px 26px;
   background: #d9d9d9;
-  box-shadow: 0 22px 40px rgba(0,0,0,0.25);
 
+  box-shadow: 0 22px 40px rgba(0,0,0,0.25);
   text-align: center;
 }
 
@@ -198,7 +211,9 @@ body {
   transform: translateY(-1px);
 }
 
-/* Connector line from center timeline to card */
+/* ---------------------------
+   CONNECTOR LINE FROM CENTER TO CARD
+---------------------------- */
 .connector {
   position: absolute;
   top: 50%;
@@ -210,7 +225,7 @@ body {
 
 /* LEFT card */
 .event-left .event-card {
-  margin-left: -420px; /* pulls card left of center */
+  margin-left: -420px;
 }
 
 .event-left .connector {
@@ -221,7 +236,7 @@ body {
 
 /* RIGHT card */
 .event-right .event-card {
-  margin-left: 420px; /* pushes card right of center */
+  margin-left: 420px;
 }
 
 .event-right .connector {
@@ -230,7 +245,7 @@ body {
   transform: translate(0, -50%);
 }
 
-/* optional: lower placement for the 3rd frame look */
+/* lower placement for 3rd frame look */
 .event-right-low .event-card {
   margin-top: 120px;
 }
@@ -249,7 +264,7 @@ body {
     margin: 0;
   }
 
-  .connector { display: none; } /* on mobile: remove connector */
+  .connector { display: none; }
   .event { padding-top: 120px; }
 
   .decade-title {
