@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NP Campus Map</title>
+  <link rel="stylesheet" href="/CSS/map.css" />
+</head>
+
+<body>
+
+  <!-- NAVBAR (same as homepage) -->
+  <header class="topbar">
+    <a class="brand" href="/index.html" aria-label="Home">
+      <img class="brand-logo" src="/Images/NP Logo.png" alt="Ngee Ann Polytechnic logo" />
+    </a>
+
+    <nav class="nav-pill">
+      <a href="/index.html#about" class="nav-link">About</a>
+      <a href="/HTML/Our_Past.html" class="nav-link">Our Past</a>
+      <a href="/index.html#stories" class="nav-link">Stories</a>
+
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 2c-4.2 0-7.6 2.2-7.6 4.8a1.2 1.2 0 0 0 1.2 1.2h12.8a1.2 1.2 0 0 0 1.2-1.2c0-2.6-3.4-4.8-7.6-4.8Z"/>
+        </svg>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="map-layout">
+
+    <!-- FILTER PANEL (yellow) -->
+    <aside class="filter-panel">
+      <h2 class="filter-title">Filter</h2>
+
+      <label><input type="checkbox"> Health Science</label>
+      <label><input type="checkbox"> Engineering</label>
+      <label><input type="checkbox"> InfoComm Technology</label>
+      <label><input type="checkbox"> Design & Environment</label>
+      <label><input type="checkbox"> Film & Media Studies</label>
+      <label><input type="checkbox"> Business & Accountancy</label>
+      <label><input type="checkbox"> Life Science & Chemical Tech</label>
+      <label><input type="checkbox"> Human & Interdisciplinary Studies</label>
+      <label><input type="checkbox"> Student Facilities</label>
+      <label><input type="checkbox"> Canteens</label>
+      <label><input type="checkbox"> Heritage Areas</label>
+    </aside>
+
+    <!-- MAP CONTAINER (red) -->
+    <section class="map-container">
+      <img src="/Images/map.png" alt="Ngee Ann Polytechnic Campus Map" />
+    </section>
+
+  </main>
+
+</body>
+</html>

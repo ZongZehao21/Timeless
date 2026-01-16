@@ -1,0 +1,140 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+/* ---------------------------
+   NAVBAR (same as homepage)
+---------------------------- */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  padding: 26px 46px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  z-index: 100;
+}
+
+.brand-logo {
+  height: 56px;
+}
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 16px 22px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 28px rgba(0,0,0,0.14);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #111;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.nav-link:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.nav-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.nav-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ---------------------------
+   MAIN MAP LAYOUT
+---------------------------- */
+.map-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+
+  padding: 140px 32px 32px;
+}
+
+/* ---------------------------
+   FILTER PANEL (yellow)
+---------------------------- */
+.filter-panel {
+  background: #cfcfcf;
+  padding: 22px;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.filter-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.filter-panel label {
+  display: flex;
+  gap: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ---------------------------
+   MAP CONTAINER (red)
+---------------------------- */
+.map-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-container img {
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 220px);
+  object-fit: contain;
+}
+
+/* ---------------------------
+   RESPONSIVE
+---------------------------- */
+@media (max-width: 900px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-panel {
+    order: 2;
+  }
+}
