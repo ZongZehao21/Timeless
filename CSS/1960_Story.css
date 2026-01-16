@@ -1,0 +1,265 @@
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  overflow-x: hidden;
+  background: #000;
+}
+
+.decade-page {
+  position: relative;
+}
+
+/* ---------------------------
+   NAVBAR (same as homepage)
+---------------------------- */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  padding: 26px 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 50;
+}
+
+.brand-logo {
+  height: 58px;
+  width: auto;
+  display: block;
+}
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 16px 22px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+
+  border-radius: 18px;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.14);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #111;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.nav-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.nav-icon:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.nav-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: #111;
+}
+
+/* ---------------------------
+   DECADE TITLE
+---------------------------- */
+.decade-title {
+  position: fixed;
+  top: 130px;            /* below navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(56px, 7vw, 110px);
+
+  color: #fff3b0; /* warm pale yellow like your frame */
+  text-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  pointer-events: none;
+}
+
+/* ---------------------------
+   CENTER TIMELINE LINE
+---------------------------- */
+.timeline-line {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  background: #2f7b73; /* teal */
+  z-index: 15;
+  opacity: 0.95;
+}
+
+/* ---------------------------
+   FULLSCREEN EVENT SECTIONS
+---------------------------- */
+.event {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: var(--bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  padding-top: 140px; /* navbar space */
+  padding-bottom: 80px;
+}
+
+/* soft overlay for readability */
+.event-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 1;
+}
+
+/* ---------------------------
+   CARD + CONNECTOR
+---------------------------- */
+.event-card {
+  position: relative;
+  z-index: 20;
+
+  width: min(420px, 86vw);
+  padding: 28px 26px;
+  background: #d9d9d9;
+  box-shadow: 0 22px 40px rgba(0,0,0,0.25);
+
+  text-align: center;
+}
+
+.event-year {
+  margin: 0 0 12px;
+  font-size: clamp(40px, 4vw, 58px);
+  font-weight: 900;
+  color: #6a3d14;
+}
+
+.event-text {
+  margin: 0 0 22px;
+  font-size: clamp(16px, 1.35vw, 20px);
+  line-height: 1.45;
+  color: #7a4b1d;
+}
+
+.event-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;
+  padding: 0 26px;
+  border-radius: 999px;
+
+  background: #3e7bbf;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+
+  box-shadow: 0 14px 22px rgba(0,0,0,0.18);
+  transition: transform 0.15s ease;
+}
+
+.event-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Connector line from center timeline to card */
+.connector {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 10px;
+  background: #2f7b73;
+  z-index: 18;
+}
+
+/* LEFT card */
+.event-left .event-card {
+  margin-left: -420px; /* pulls card left of center */
+}
+
+.event-left .connector {
+  left: 50%;
+  width: 280px;
+  transform: translate(-100%, -50%);
+}
+
+/* RIGHT card */
+.event-right .event-card {
+  margin-left: 420px; /* pushes card right of center */
+}
+
+.event-right .connector {
+  left: 50%;
+  width: 280px;
+  transform: translate(0, -50%);
+}
+
+/* optional: lower placement for the 3rd frame look */
+.event-right-low .event-card {
+  margin-top: 120px;
+}
+.event-right-low .connector {
+  top: calc(50% + 120px);
+}
+
+/* ---------------------------
+   RESPONSIVE
+---------------------------- */
+@media (max-width: 900px) {
+  .timeline-line { width: 8px; }
+
+  .event-left .event-card,
+  .event-right .event-card {
+    margin: 0;
+  }
+
+  .connector { display: none; } /* on mobile: remove connector */
+  .event { padding-top: 120px; }
+
+  .decade-title {
+    top: 120px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar { padding: 18px 18px; }
+  .nav-pill { gap: 10px; padding: 12px 14px; }
+  .brand-logo { height: 46px; }
+}

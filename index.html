@@ -3,56 +3,180 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home Page</title>
+  <title>Timeless NP - Home</title>
   <link rel="stylesheet" href="./CSS/style.css" />
 </head>
 
 <body>
-  <main class="page">
-    <section class="hero" aria-label="Landing hero section">
-      <!-- Background image -->
-      <img class="hero-bg" src="./Images/Landing Page backgound picture.jpg" alt="Landing Page BG Image" />
+  <!-- HERO -->
+  <section class="hero" aria-label="Landing hero section">
+    <!-- RIGHT image (modern NP campus) -->
+    <img class="hero-bg hero-bg-right" src="/Images/Landing Page backgound picture.jpg" alt="NP campus background" />
 
-      <!-- Dark overlay for text contrast -->
-      <div class="hero-overlay" aria-hidden="true"></div>
+    <!-- LEFT image (old NP building) that fades into the right image -->
+    <img class="hero-bg hero-bg-left" src="/Images/house image.png" alt="Old NP building background" />
 
-      <!-- Top bar -->
-      <header class="topbar">
-        <a class="brand" href="index.html">
-          <!-- Replace this logo -->
-          <img class="brand-logo" src="./Images/NP Logo.png" alt="NP Logo" />
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Home">
+        <img class="brand-logo" src="/Images/NP Logo.png" alt="Ngee Ann Polytechnic logo" />
+      </a>
+
+      <nav class="nav-pill" aria-label="Primary navigation">
+        <a href="#about" class="nav-link">About</a>
+        <a href="./HTML/Our_Past.html" class="nav-link">Our Past</a>
+        <a href="#stories" class="nav-link">Stories</a>
+
+        <a href="#profile" class="nav-icon" aria-label="Profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 2c-4.2 0-7.6 2.2-7.6 4.8a1.2 1.2 0 0 0 1.2 1.2h12.8a1.2 1.2 0 0 0 1.2-1.2c0-2.6-3.4-4.8-7.6-4.8Z"/>
+          </svg>
         </a>
+      </nav>
+    </header>
 
-        <nav class="nav" aria-label="Primary">
-          <a href="#about" class="nav-link">About</a>
-          <a href="#past" class="nav-link">Our Past</a>
-          <a href="#story" class="nav-link">Your Story</a>
-        </nav>
-      </header>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Welcome to<br />
+        <span class="hero-title-strong">Timeless - NP</span>
+      </h1>
 
-      <!-- Main content -->
-      <div class="hero-content">
-        <h1 class="hero-title">
-          Welcome to<br />
-          <span class="hero-title-strong">Timeless - NP</span>
-        </h1>
+      <p class="hero-subtitle">
+        Changing the way of learning history<br />
+        through interactive experiences
+      </p>
 
-        <p class="hero-subtitle">
-          Changing the way of learning<br />
-          history through immersive experiences.
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#about">Learn more</a>
+        <a class="btn btn-outline" href="#contact">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section parchment">
+    <div class="container about-grid">
+      <div class="about-text">
+        <h2 class="section-title">What is Timeless about?</h2>
+        <p class="section-body">
+          We are a fun and nostalgic corner of the internet made for Ngee Ann Polytechnic,
+          where we bring history to life as well as inspiring current and future staff and
+          students to connect with NP’s Values, Purpose, Future
         </p>
+      </div>
 
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#learn">Learn More</a>
-          <a class="btn btn-ghost" href="#contact">Contact Us</a>
+      <div class="about-media">
+        <!-- Replace with your collage image from Figma -->
+        <img src="/Images/About us Picture.png" alt="Timeless collage" />
+      </div>
+    </div>
+
+    <div class="container">
+      <h2 class="section-title big-gap">Frequently Asked Questions</h2>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section parchment" aria-label="FAQ">
+    <div class="container faq-grid">
+      <details class="faq-item">
+        <summary class="faq-summary">What is Kickstart fund?</summary>
+        <div class="faq-panel">
+          <p>
+            The Kickstart Fund supports NP students in innovation and entrepreneurship by providing funding
+            and mentor guidance to prototype projects and ideas.
+          </p>
         </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">What’s NP’s land mark?</summary>
+        <div class="faq-panel">
+          <p>
+            NP’s landmark is often associated with iconic campus architecture and spaces that represent
+            NP’s identity across the decades.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">No. of Schools in NP?</summary>
+        <div class="faq-panel">
+          <p>
+            NP has multiple schools (faculties) covering areas like Business, ICT, Engineering, Media, Health,
+            and more. (Replace with your exact number if needed.)
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">How’re marks graded?</summary>
+        <div class="faq-panel">
+          <p>
+            NP uses module-based assessments with weighted components like assignments, projects, tests,
+            and exams depending on the module structure.
+          </p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section parchment" aria-label="Contact Us">
+    <div class="container contact-grid">
+      <div class="contact-left">
+        <!-- Replace with your illustration -->
+        <img src="/Images/contact us.png" alt="Contact illustration" />
       </div>
 
-      <!-- Bottom bar -->
-      <div class="bottom-bar">
-        <span class="bottom-text">LESGO!</span>
+      <div class="contact-form-wrap">
+        <h2 class="section-title">Contact Us</h2>
+
+        <form class="contact-form" action="#" method="post">
+          <div class="field">
+            <label for="fullname">Full Name</label>
+            <input id="fullname" name="fullname" type="text" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+
+          <div class="field">
+            <label for="message">Type your message here...</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+
+          <button class="contact-btn" type="submit">Contact Us</button>
+        </form>
       </div>
-    </section>
-  </main>
+
+      <aside class="contact-right" aria-label="Contact details">
+        <div class="contact-block">
+          <h3>Contact</h3>
+          <p class="contact-big">Timeless@np.sg</p>
+        </div>
+
+        <div class="contact-block">
+          <h3>Based in</h3>
+          <p class="contact-big">Singapore</p>
+        </div>
+
+        <div class="contact-icons" aria-label="Social links">
+          <a href="#" aria-label="Instagram" class="icon-btn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm-5 4.5A5.5 5.5 0 1 1 6.5 14 5.5 5.5 0 0 1 12 8.5Zm0 2A3.5 3.5 0 1 0 15.5 14 3.5 3.5 0 0 0 12 10.5ZM18 6.7a1 1 0 1 1-1 1 1 1 0 0 1 1-1Z"/>
+            </svg>
+          </a>
+
+          <a href="#" aria-label="Email" class="icon-btn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2v.2l8 5.2 8-5.2V8H4Zm16 10V10.6l-7.4 4.8a1.2 1.2 0 0 1-1.2 0L4 10.6V18h16Z"/>
+            </svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
 </body>
 </html>
