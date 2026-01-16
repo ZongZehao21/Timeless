@@ -213,6 +213,7 @@ body {
 
 /* ---------------------------
    CONNECTOR LINE FROM CENTER TO CARD
+   (UPDATED: higher z-index + longer + cards pushed further)
 ---------------------------- */
 .connector {
   position: absolute;
@@ -220,28 +221,28 @@ body {
   transform: translateY(-50%);
   height: 10px;
   background: #2f7b73;
-  z-index: 18;
+  z-index: 18; /* important so it shows above the card edge */
 }
 
-/* LEFT card */
+/* LEFT card (push further left) */
 .event-left .event-card {
-  margin-left: -420px;
+  margin-left: -600px; /* was -420px */
 }
 
 .event-left .connector {
   left: 50%;
-  width: 280px;
+  width: 360px; /* was 280px */
   transform: translate(-100%, -50%);
 }
 
-/* RIGHT card */
+/* RIGHT card (push further right) */
 .event-right .event-card {
-  margin-left: 420px;
+  margin-left: 600px; /* was 420px */
 }
 
 .event-right .connector {
   left: 50%;
-  width: 280px;
+  width: 360px; /* was 280px */
   transform: translate(0, -50%);
 }
 
@@ -261,7 +262,7 @@ body {
 
   .event-left .event-card,
   .event-right .event-card {
-    margin: 0;
+    margin: 0; /* centered on mobile */
   }
 
   .connector { display: none; }
