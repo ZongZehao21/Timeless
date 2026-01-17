@@ -101,7 +101,6 @@ app.post("/api/chat", async (req, res) => {
         "Rules:\n" +
         "- If the user asks for navigation (e.g., 'bring me to contact us'), call navigate.\n" +
         "- If the user asks to go to a section on the current page, call scroll_to.\n" +
-        "- If answering, use ONLY the SOURCES and add citations like [SOURCE 1].\n" +
         "- If SOURCES do not contain the answer, say you don't have it yet.\n" +
         "- Never claim you can control the user's laptop. You only control this website tab.\n",
       input:
