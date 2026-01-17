@@ -31,13 +31,13 @@ body {
 
 /* Bottom image */
 .bg-bottom {
-  background-image: url("../Images/our\ past\ bg\ image\ 2.png");
+  background-image: url("Images/our\ past\ bg\ image\ 2.png");
   z-index: 0;
 }
 
 /* Top image with vertical blend */
 .bg-top {
-  background-image: url("../Images/house\ image.png");
+  background-image: url("Images/house\ image.png");
   z-index: 1;
 
   -webkit-mask-image: linear-gradient(
