@@ -78,7 +78,7 @@
   }
 
   function safeNavigate(path) {
-    // Allow only your real pages
+    // Allow only your real pages (base path WITHOUT any #hash)
     const allowedBases = [
       "/index.html",
       "/HTML/Our_Past.html",
@@ -86,9 +86,42 @@
       "/HTML/map.html",
       "/HTML/1960_Story.html"
     ];
-    const base = String(path).split("#")[0];
-    if (!allowedBases.includes(base)) return false;
-    window.location.href = path;
+
+    const raw = String(path || "").trim();
+    if (!raw) return false;
+
+    // Block external / javascript: URLs
+    if (/^(https?:)?\/\//i.test(raw)) return false;
+    if (/^javascript:/i.test(raw)) return false;
+
+    const [basePath, hash = ""] = raw.split("#");
+    if (!allowedBases.includes(basePath)) return false;
+
+    // GitHub Pages project sites live under /<repo-name>/...
+    // If we navigate to /HTML/... directly, GitHub Pages will 404.
+    // This adds the repo prefix automatically when needed.
+    const segs = window.location.pathname.split("/").filter(Boolean);
+    const isGitHubPages = window.location.hostname.endsWith("github.io");
+    const reserved = new Set(["HTML", "CSS", "Images", "JavaScript", "img"]);
+
+    let repoPrefix = "";
+    if (isGitHubPages && segs.length > 0) {
+      const first = segs[0];
+      // If the first segment is not a known folder and not an .html file,
+      // treat it as the repo name prefix.
+      if (!reserved.has(first) && !first.endsWith(".html")) {
+        repoPrefix = `/${first}`;
+      }
+    }
+
+    // Avoid double-prefixing if it's already there
+    let finalPath = basePath;
+    if (repoPrefix && !basePath.startsWith(repoPrefix + "/")) {
+      finalPath = repoPrefix + basePath;
+    }
+
+    const finalUrl = hash ? `${finalPath}#${hash}` : finalPath;
+    window.location.href = finalUrl;
     return true;
   }
 
