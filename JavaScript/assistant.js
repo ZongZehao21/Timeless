@@ -9,7 +9,7 @@
 */
 
 (() => {
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = "https://timeless-ai-assistant.onrender.com";
 
   function el(tag, attrs = {}, children = []) {
     const node = document.createElement(tag);
