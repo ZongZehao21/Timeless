@@ -1,0 +1,42 @@
+[
+  {
+    "id": "home-about",
+    "title": "Timeless NP - About",
+    "text": "Timeless NP is a fun and nostalgic corner of the internet made for Ngee Ann Polytechnic, where history is brought to life through interactive experiences. It aims to inspire current and future staff and students to connect with NP’s values, purpose, and future."
+  },
+  {
+    "id": "faq-kickstart",
+    "title": "FAQ: Kickstart Fund",
+    "text": "The Kickstart Fund supports NP students in innovation and entrepreneurship by providing funding and mentor guidance to prototype projects and ideas."
+  },
+  {
+    "id": "faq-landmark",
+    "title": "FAQ: NP landmark",
+    "text": "NP’s landmark is often associated with iconic campus architecture and spaces that represent NP’s identity across the decades."
+  },
+  {
+    "id": "faq-schools",
+    "title": "FAQ: Schools in NP",
+    "text": "NP has multiple schools (faculties) covering areas like Business, ICT, Engineering, Media, Health, and more."
+  },
+  {
+    "id": "faq-grading",
+    "title": "FAQ: Grading",
+    "text": "NP uses module-based assessments with weighted components like assignments, projects, tests, and exams depending on the module structure."
+  },
+  {
+    "id": "pages",
+    "title": "Website pages",
+    "text": "Main pages: Home (index.html), Our Past (/HTML/Our_Past.html), Student Stories (/HTML/User_Stories.html), Campus Map (/HTML/map.html), and 1960s Timeline (/HTML/1960_Story.html)."
+  },
+  {
+    "id": "stories",
+    "title": "Student Stories",
+    "text": "Student Stories lets users share an experience with a photo, caption, hashtags, mood, location, and an optional school label. Users can filter stories by category, location, and school."
+  },
+  {
+    "id": "map",
+    "title": "NP Campus Map",
+    "text": "The Map page shows an NP campus map and includes a filter panel for different types of locations (e.g., schools, facilities, canteens, heritage areas)."
+  }
+]
