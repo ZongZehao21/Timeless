@@ -156,15 +156,15 @@ body {
 
 /* Background image for each year (FULL PAGE) */
 .bg-1963 {
-  background-image: url("Images/1963 first image.png");
+  background-image: url("Images/1963_first_image.png");
 }
 
 .bg-1967 {
-  background-image: url("Images/1963 second image.png");
+  background-image: url("Images/1963_second_image.png");
 }
 
 .bg-1968 {
-  background-image: url("Images/1963 third image.png");
+  background-image: url("Images/1963_third_image.png");
 }
 
 /* overlay for readability */
