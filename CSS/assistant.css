@@ -1,0 +1,134 @@
+/* Timeless NP - AI Assistant widget */
+
+.ai-fab{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.ai-panel{
+  position: fixed;
+  right: 18px;
+  bottom: 86px;
+  width: 420px;
+  max-width: calc(100vw - 36px);
+  height: 560px;
+  max-height: calc(100vh - 120px);
+  background: rgba(20, 22, 28, 0.92);
+  color: #f0f2f5;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+}
+
+.ai-panel.open{ display:flex; }
+
+.ai-header{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
+
+.ai-title{ font-weight: 800; font-size: 14px; }
+.ai-subtitle{ font-size: 12px; opacity: 0.75; margin-top: 2px; }
+
+.ai-close{
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #f0f2f5;
+  cursor: pointer;
+}
+
+.ai-messages{
+  flex: 1;
+  padding: 12px;
+  overflow: auto;
+}
+
+.ai-msg{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  margin-bottom: 10px;
+}
+
+.ai-msg.user{
+  background: rgba(95, 210, 255, 0.14);
+  margin-left: 38px;
+}
+
+.ai-msg.ai{
+  background: rgba(255,255,255,0.04);
+  margin-right: 38px;
+}
+
+.ai-meta{
+  font-size: 12px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.ai-inputbar{
+  display:flex;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid rgba(255,255,255,0.14);
+}
+
+.ai-inputbar input{
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #f0f2f5;
+  outline: none;
+}
+
+.ai-inputbar button{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(95, 210, 255, 0.18);
+  color: #f0f2f5;
+  cursor: pointer;
+}
+
+.ai-inputbar button:hover{
+  background: rgba(95, 210, 255, 0.26);
+}
+
+.ai-hints{
+  padding: 10px 12px 14px;
+  font-size: 12px;
+  opacity: 0.75;
+  border-top: 1px dashed rgba(255,255,255,0.14);
+}
+
+.ai-hints span{
+  display:inline-block;
+  margin: 6px 6px 0 0;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+}
