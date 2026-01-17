@@ -12,6 +12,89 @@ body {
   background-attachment: fixed;
 }
 
+/* ---------------------------
+   Nav Bar */
+/* Top bar */
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 26px 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+}
+
+.brand-logo {
+  height: 58px;
+  width: auto;
+}
+
+/* Pill nav */
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 22px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.14);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #111;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+
+/* stays highlighted */
+.nav-link.active {
+  background: #18d318;
+  color: #111;
+  border-radius: 18px;
+}
+
+.nav-link:hover {
+  background: #18d318;
+  color: #111;
+  border-radius: 18px;
+
+}
+
+.nav-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.nav-icon.active {
+  background: #18d318;
+  color: #111;
+  border-radius: 18px;
+}
+
+
+.nav-icon:hover {
+  background: #18d318;
+  color: #111;
+  border-radius: 18px;
+
+}
+
+
+.nav-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: #111;
+}
+/* Nav Bar End */
+
 .site-header {
   text-align: center;
   padding: 26px 16px 14px;
