@@ -1,40 +1,41 @@
 /*
   Timeless NP - Real AI Assistant (Frontend)
-  - Injects a chat widget on every page.
-  - Calls a local backend (Node/Express) at http://localhost:3001
-  - Executes ONLY safe in-page actions (navigate / scroll).
-
-  IMPORTANT:
-  - Do NOT put your OpenAI API key in frontend code.
+  - Chat widget on every page
+  - Calls backend on Render
+  - Safe website actions only (navigate / scroll)
+  - Memory + AskGPT-style reference selection
 */
 
 (() => {
   const API_BASE = "https://timeless-ai-assistant.onrender.com";
 
   // -------------------------------
-  // Lightweight client-side memory
+  // Client-side memory + selection
   // -------------------------------
-  // This lets the assistant handle follow-ups like:
-  // User: tell me what happened in 2009
-  // User: summarize it in point form
-  // by sending the last few turns back to the server.
-  //
-  // Stored locally in the browser (per device / per browser).
   const SESSION_KEY = "timeless_ai_session_id";
-  const HISTORY_KEY = "timeless_ai_history_v1";
-  const MAX_TURNS = 12; // last 12 messages (user+assistant combined)
+  const HISTORY_KEY = "timeless_ai_history_v2";
+  const SELECTED_KEY = "timeless_ai_selected_msg_v1";
+
+  const MAX_TURNS = 12; // user+assistant combined
+
+  function uuid() {
+    try {
+      return crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    } catch {
+      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+  }
 
   function getSessionId() {
     try {
       let id = localStorage.getItem(SESSION_KEY);
       if (!id) {
-        id = (crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`);
+        id = uuid();
         localStorage.setItem(SESSION_KEY, id);
       }
       return id;
     } catch {
-      // If localStorage is blocked, fall back to an in-memory id.
-      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      return uuid();
     }
   }
 
@@ -56,14 +57,39 @@
     }
   }
 
-  // History format we send to the server: [{ role: 'user'|'assistant', text: '...' }, ...]
+  function loadSelectedId() {
+    try {
+      return localStorage.getItem(SELECTED_KEY) || "";
+    } catch {
+      return "";
+    }
+  }
+
+  function saveSelectedId(id) {
+    try {
+      if (!id) localStorage.removeItem(SELECTED_KEY);
+      else localStorage.setItem(SELECTED_KEY, id);
+    } catch {
+      // ignore
+    }
+  }
+
+  // History objects: { id, role: 'user'|'assistant', text, ts }
   let HISTORY = loadHistory();
   const SESSION_ID = getSessionId();
 
-  function pushTurn(role, text) {
+  // selected assistant message id (AskGPT-style)
+  let SELECTED_ID = loadSelectedId();
+
+  function pushTurn(role, text, id = undefined) {
     const clean = String(text || "").trim();
     if (!clean) return;
-    HISTORY.push({ role, text: clean });
+    HISTORY.push({
+      id: id || uuid(),
+      role,
+      text: clean,
+      ts: Date.now()
+    });
     HISTORY = HISTORY.slice(-MAX_TURNS);
     saveHistory(HISTORY);
   }
@@ -73,6 +99,7 @@
     for (const [k, v] of Object.entries(attrs)) {
       if (k === "class") node.className = v;
       else if (k === "html") node.innerHTML = v;
+      else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
       else node.setAttribute(k, v);
     }
     for (const c of children) node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
@@ -80,7 +107,7 @@
   }
 
   function ensureWidget() {
-    if (document.getElementById("ai-fab")) return; // already exists
+    if (document.getElementById("ai-fab")) return;
 
     const fab = el("button", { id: "ai-fab", class: "ai-fab", type: "button", "aria-label": "Open AI Assistant" }, ["AI"]);
 
@@ -92,11 +119,20 @@
         ]),
         el("button", { id: "ai-close", class: "ai-close", type: "button", "aria-label": "Close" }, ["✕"])
       ]),
+
+      // Reference bar
+      el("div", { id: "ai-refbar", class: "ai-refbar", "aria-hidden": "true" }, [
+        el("div", { class: "ai-reftext", id: "ai-reftext" }, ["Referring to: (none)"]),
+        el("button", { id: "ai-refclear", class: "ai-refclear", type: "button" }, ["Clear"])
+      ]),
+
       el("div", { id: "ai-messages", class: "ai-messages", role: "log", "aria-live": "polite" }),
+
       el("form", { id: "ai-form", class: "ai-inputbar" }, [
         el("input", { id: "ai-input", type: "text", placeholder: "Ask a question or type a command…", autocomplete: "off" }),
         el("button", { type: "submit" }, ["Send"])
       ]),
+
       el("div", { class: "ai-hints" }, [
         "Examples: ",
         el("span", {}, ["What is Kickstart Fund?"]),
@@ -123,23 +159,104 @@
     panel.setAttribute("aria-hidden", "true");
   }
 
-  function addMessage(role, text, persist = true) {
+  function setSelectedMessage(msgId) {
+    SELECTED_ID = msgId || "";
+    saveSelectedId(SELECTED_ID);
+    renderRefBar();
+    highlightSelectedBubble();
+  }
+
+  function getSelectedMessage() {
+    if (!SELECTED_ID) return null;
+    return HISTORY.find(m => m.id === SELECTED_ID && m.role === "assistant") || null;
+  }
+
+  function renderRefBar() {
+    const refbar = document.getElementById("ai-refbar");
+    const reftext = document.getElementById("ai-reftext");
+    if (!refbar || !reftext) return;
+
+    const sel = getSelectedMessage();
+    if (!sel) {
+      refbar.setAttribute("aria-hidden", "true");
+      refbar.classList.remove("show");
+      reftext.textContent = "Referring to: (none)";
+      return;
+    }
+
+    refbar.setAttribute("aria-hidden", "false");
+    refbar.classList.add("show");
+    const snippet = sel.text.length > 90 ? sel.text.slice(0, 90) + "…" : sel.text;
+    reftext.textContent = `Referring to: ${snippet}`;
+  }
+
+  function highlightSelectedBubble() {
+    const msgs = document.querySelectorAll(".ai-msg.ai[data-msgid]");
+    msgs.forEach(n => n.classList.remove("selected"));
+    if (!SELECTED_ID) return;
+    const selNode = document.querySelector(`.ai-msg.ai[data-msgid="${CSS.escape(SELECTED_ID)}"]`);
+    if (selNode) selNode.classList.add("selected");
+  }
+
+  function addMessage(role, text, persist = true, msgId = undefined) {
     const messages = document.getElementById("ai-messages");
-    const msg = el("div", { class: `ai-msg ${role}` }, [
-      el("div", { class: "ai-meta" }, [role === "user" ? "You" : "Assistant"]),
+
+    const id = msgId || uuid();
+
+    const metaLabel = role === "user" ? "You" : "Assistant";
+    const bubble = el("div", {
+      class: `ai-msg ${role}`,
+      "data-msgid": role === "ai" ? id : ""
+    }, [
+      el("div", { class: "ai-meta" }, [metaLabel]),
       el("div", { class: "ai-text" }, [text])
     ]);
-    messages.appendChild(msg);
+
+    // Add per-message actions for assistant replies
+    if (role === "ai") {
+      const btnRow = el("div", { class: "ai-actions" }, [
+        el("button", {
+          type: "button",
+          class: "ai-actionbtn",
+          onclick: () => {
+            setSelectedMessage(id);
+            addMessage("ai", "Okay — I’ll treat that message as what you’re referring to.", false);
+          }
+        }, ["Refer"]),
+
+        el("button", {
+          type: "button",
+          class: "ai-actionbtn",
+          onclick: () => {
+            setSelectedMessage(id);
+            onUser("Summarize it in a short paragraph.");
+          }
+        }, ["Summarize"]),
+
+        el("button", {
+          type: "button",
+          class: "ai-actionbtn",
+          onclick: () => {
+            setSelectedMessage(id);
+            onUser("Summarize it in point form (5 to 7 bullets).");
+          }
+        }, ["Point form"])
+      ]);
+      bubble.appendChild(btnRow);
+    }
+
+    messages.appendChild(bubble);
     messages.scrollTop = messages.scrollHeight;
 
-    // Persist memory for follow-up questions.
-    if (persist) pushTurn(role === "user" ? "user" : "assistant", text);
+    if (persist) {
+      pushTurn(role === "user" ? "user" : "assistant", text, id);
+    }
 
-    return msg;
+    highlightSelectedBubble();
+    return bubble;
   }
 
   function safeNavigate(path) {
-    // Allow only your real pages (base path WITHOUT any #hash)
     const allowedBases = [
       "/index.html",
       "/HTML/Our_Past.html",
@@ -151,16 +268,12 @@
     const raw = String(path || "").trim();
     if (!raw) return false;
 
-    // Block external / javascript: URLs
     if (/^(https?:)?\/\//i.test(raw)) return false;
     if (/^javascript:/i.test(raw)) return false;
 
     const [basePath, hash = ""] = raw.split("#");
     if (!allowedBases.includes(basePath)) return false;
 
-    // GitHub Pages project sites live under /<repo-name>/...
-    // If we navigate to /HTML/... directly, GitHub Pages will 404.
-    // This adds the repo prefix automatically when needed.
     const segs = window.location.pathname.split("/").filter(Boolean);
     const isGitHubPages = window.location.hostname.endsWith("github.io");
     const reserved = new Set(["HTML", "CSS", "Images", "JavaScript", "img"]);
@@ -168,14 +281,11 @@
     let repoPrefix = "";
     if (isGitHubPages && segs.length > 0) {
       const first = segs[0];
-      // If the first segment is not a known folder and not an .html file,
-      // treat it as the repo name prefix.
       if (!reserved.has(first) && !first.endsWith(".html")) {
         repoPrefix = `/${first}`;
       }
     }
 
-    // Avoid double-prefixing if it's already there
     let finalPath = basePath;
     if (repoPrefix && !basePath.startsWith(repoPrefix + "/")) {
       finalPath = repoPrefix + basePath;
@@ -202,8 +312,8 @@
         message,
         page,
         sessionId: SESSION_ID,
-        // Send a short conversation window so the AI can refer back.
-        history: HISTORY.slice(-MAX_TURNS)
+        history: HISTORY.slice(-MAX_TURNS).map(m => ({ id: m.id, role: m.role, text: m.text })),
+        selectedMessageId: SELECTED_ID || ""
       })
     });
 
@@ -234,6 +344,7 @@
 
   async function onUser(text) {
     addMessage("user", text);
+
     const thinking = addMessage("ai", "Thinking…", false);
 
     try {
@@ -266,6 +377,7 @@
     const close = document.getElementById("ai-close");
     const form = document.getElementById("ai-form");
     const input = document.getElementById("ai-input");
+    const refClear = document.getElementById("ai-refclear");
 
     fab.addEventListener("click", () => {
       const panel = document.getElementById("ai-panel");
@@ -273,6 +385,11 @@
     });
 
     close.addEventListener("click", closePanel);
+
+    refClear?.addEventListener("click", () => {
+      setSelectedMessage("");
+      addMessage("ai", "Cleared — I won’t refer to a specific previous message anymore.", false);
+    });
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -282,32 +399,64 @@
       onUser(text);
     });
 
-    // Restore prior conversation in this browser session (optional).
-    if (HISTORY.length > 0) {
-      // Only render if the chat is empty.
-      const messages = document.getElementById("ai-messages");
-      if (messages && messages.children.length === 0) {
-        for (const m of HISTORY) {
-          const role = m.role === "user" ? "user" : "ai";
-          // Render without re-saving history (temporary toggle)
-          const prev = HISTORY;
-          HISTORY = prev; // no-op (kept for clarity)
-          const msg = el("div", { class: `ai-msg ${role}` }, [
-            el("div", { class: "ai-meta" }, [role === "user" ? "You" : "Assistant"]),
-            el("div", { class: "ai-text" }, [m.content])
+    // Restore prior conversation in this browser session
+    const messages = document.getElementById("ai-messages");
+    if (messages && messages.children.length === 0 && HISTORY.length > 0) {
+      for (const m of HISTORY) {
+        const role = m.role === "user" ? "user" : "ai";
+        // Render without re-saving history
+        const bubble = el("div", {
+          class: `ai-msg ${role}`,
+          "data-msgid": role === "ai" ? m.id : ""
+        }, [
+          el("div", { class: "ai-meta" }, [role === "user" ? "You" : "Assistant"]),
+          el("div", { class: "ai-text" }, [m.text])
+        ]);
+
+        // Re-add actions for assistant bubbles on restore
+        if (role === "ai") {
+          const btnRow = el("div", { class: "ai-actions" }, [
+            el("button", {
+              type: "button",
+              class: "ai-actionbtn",
+              onclick: () => {
+                setSelectedMessage(m.id);
+                addMessage("ai", "Okay — I’ll treat that message as what you’re referring to.", false);
+              }
+            }, ["Refer"]),
+            el("button", {
+              type: "button",
+              class: "ai-actionbtn",
+              onclick: () => {
+                setSelectedMessage(m.id);
+                onUser("Summarize it in a short paragraph.");
+              }
+            }, ["Summarize"]),
+            el("button", {
+              type: "button",
+              class: "ai-actionbtn",
+              onclick: () => {
+                setSelectedMessage(m.id);
+                onUser("Summarize it in point form (5 to 7 bullets).");
+              }
+            }, ["Point form"])
           ]);
-          messages.appendChild(msg);
+          bubble.appendChild(btnRow);
         }
-        messages.scrollTop = messages.scrollHeight;
+
+        messages.appendChild(bubble);
       }
+      messages.scrollTop = messages.scrollHeight;
     }
 
     if (HISTORY.length === 0) {
-      addMessage("ai", "Hi! Ask me about Timeless NP, or type: ‘bring me to contact us page’." );
+      addMessage("ai", "Hi! Ask me about Timeless NP, or type: ‘bring me to contact us page’."); 
     }
+
+    renderRefBar();
+    highlightSelectedBubble();
   }
 
-  // Init
   document.addEventListener("DOMContentLoaded", () => {
     ensureWidget();
     wireUI();

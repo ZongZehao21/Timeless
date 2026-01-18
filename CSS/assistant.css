@@ -58,6 +58,38 @@
   cursor: pointer;
 }
 
+/* Reference bar (AskGPT-style) */
+.ai-refbar{
+  display: none;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.04);
+}
+
+.ai-refbar.show{ display:flex; }
+
+.ai-reftext{
+  flex: 1;
+  font-size: 12px;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+.ai-refclear{
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #f0f2f5;
+  cursor: pointer;
+}
+
+.ai-refclear:hover{
+  background: rgba(255,255,255,0.10);
+}
+
 .ai-messages{
   flex: 1;
   padding: 12px;
@@ -81,10 +113,38 @@
   margin-right: 38px;
 }
 
+/* Highlight selected assistant message */
+.ai-msg.ai.selected{
+  outline: 2px solid rgba(95, 210, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(95, 210, 255, 0.12);
+}
+
 .ai-meta{
   font-size: 12px;
   opacity: 0.75;
   margin-bottom: 6px;
+}
+
+/* Message action buttons */
+.ai-actions{
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.ai-actionbtn{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #f0f2f5;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.ai-actionbtn:hover{
+  background: rgba(255,255,255,0.12);
 }
 
 .ai-inputbar{
@@ -138,4 +198,3 @@
   word-break: break-word;  /* prevents long overflow */
   line-height: 1.35;
 }
-
