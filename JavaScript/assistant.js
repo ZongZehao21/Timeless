@@ -11,6 +11,63 @@
 (() => {
   const API_BASE = "https://timeless-ai-assistant.onrender.com";
 
+  // -------------------------------
+  // Lightweight client-side memory
+  // -------------------------------
+  // This lets the assistant handle follow-ups like:
+  // User: tell me what happened in 2009
+  // User: summarize it in point form
+  // by sending the last few turns back to the server.
+  //
+  // Stored locally in the browser (per device / per browser).
+  const SESSION_KEY = "timeless_ai_session_id";
+  const HISTORY_KEY = "timeless_ai_history_v1";
+  const MAX_TURNS = 12; // last 12 messages (user+assistant combined)
+
+  function getSessionId() {
+    try {
+      let id = localStorage.getItem(SESSION_KEY);
+      if (!id) {
+        id = (crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`);
+        localStorage.setItem(SESSION_KEY, id);
+      }
+      return id;
+    } catch {
+      // If localStorage is blocked, fall back to an in-memory id.
+      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+  }
+
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveHistory(history) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-MAX_TURNS)));
+    } catch {
+      // ignore
+    }
+  }
+
+  // History format we send to the server: [{ role: 'user'|'assistant', text: '...' }, ...]
+  let HISTORY = loadHistory();
+  const SESSION_ID = getSessionId();
+
+  function pushTurn(role, text) {
+    const clean = String(text || "").trim();
+    if (!clean) return;
+    HISTORY.push({ role, text: clean });
+    HISTORY = HISTORY.slice(-MAX_TURNS);
+    saveHistory(HISTORY);
+  }
+
   function el(tag, attrs = {}, children = []) {
     const node = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) {
@@ -66,7 +123,7 @@
     panel.setAttribute("aria-hidden", "true");
   }
 
-  function addMessage(role, text) {
+  function addMessage(role, text, persist = true) {
     const messages = document.getElementById("ai-messages");
     const msg = el("div", { class: `ai-msg ${role}` }, [
       el("div", { class: "ai-meta" }, [role === "user" ? "You" : "Assistant"]),
@@ -74,6 +131,10 @@
     ]);
     messages.appendChild(msg);
     messages.scrollTop = messages.scrollHeight;
+
+    // Persist memory for follow-up questions.
+    if (persist) pushTurn(role === "user" ? "user" : "assistant", text);
+
     return msg;
   }
 
@@ -137,7 +198,13 @@
     const res = await fetch(`${API_BASE}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, page })
+      body: JSON.stringify({
+        message,
+        page,
+        sessionId: SESSION_ID,
+        // Send a short conversation window so the AI can refer back.
+        history: HISTORY.slice(-MAX_TURNS)
+      })
     });
 
     if (!res.ok) {
@@ -167,7 +234,7 @@
 
   async function onUser(text) {
     addMessage("user", text);
-    const thinking = addMessage("ai", "Thinking…");
+    const thinking = addMessage("ai", "Thinking…", false);
 
     try {
       const out = await callBackend(text);
@@ -188,7 +255,7 @@
       thinking.remove();
       addMessage(
         "ai",
-        "I couldn’t reach the AI server right now. If you’re using Render, it may be waking up (free tier). Try again in a moment."
+        `I couldn’t reach the AI server. If you’re using Render free tier, it may be waking up. Try again in a moment. (API: ${API_BASE})`
       );
       console.error(e);
     }
@@ -215,7 +282,29 @@
       onUser(text);
     });
 
-    addMessage("ai", "Hi! Ask me about Timeless NP, or type: ‘bring me to contact us page’." );
+    // Restore prior conversation in this browser session (optional).
+    if (HISTORY.length > 0) {
+      // Only render if the chat is empty.
+      const messages = document.getElementById("ai-messages");
+      if (messages && messages.children.length === 0) {
+        for (const m of HISTORY) {
+          const role = m.role === "user" ? "user" : "ai";
+          // Render without re-saving history (temporary toggle)
+          const prev = HISTORY;
+          HISTORY = prev; // no-op (kept for clarity)
+          const msg = el("div", { class: `ai-msg ${role}` }, [
+            el("div", { class: "ai-meta" }, [role === "user" ? "You" : "Assistant"]),
+            el("div", { class: "ai-text" }, [m.content])
+          ]);
+          messages.appendChild(msg);
+        }
+        messages.scrollTop = messages.scrollHeight;
+      }
+    }
+
+    if (HISTORY.length === 0) {
+      addMessage("ai", "Hi! Ask me about Timeless NP, or type: ‘bring me to contact us page’." );
+    }
   }
 
   // Init
