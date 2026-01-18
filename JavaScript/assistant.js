@@ -188,7 +188,7 @@
       thinking.remove();
       addMessage(
         "ai",
-        "I couldn’t reach the AI server. Make sure your backend is running at http://localhost:3001 (then refresh the page)."
+        "I couldn’t reach the AI server right now. If you’re using Render, it may be waking up (free tier). Try again in a moment."
       );
       console.error(e);
     }
